@@ -1,123 +1,148 @@
 <!DOCTYPE html>
-<html lang="mr">
+<html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <title>AMS Font Typing Converter</title>
-    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Devanagari&display=swap" rel="stylesheet">
-    <style>
-        body {
-            font-family: 'Noto Sans Devanagari', sans-serif;
-            background: #f4f4f4;
-            padding: 20px;
-            color: #333;
-        }
+  <meta charset="UTF-8" />
+  <title>AMS Font Converter</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
 
-        h1 {
-            text-align: center;
-            color: #4b0082;
-            margin-bottom: 30px;
-        }
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: 'Quicksand', sans-serif;
+    }
 
-        label {
-            font-weight: bold;
-            display: block;
-            margin-top: 20px;
-        }
+    body {
+      margin: 0;
+      padding: 30px;
+      background: linear-gradient(to right, #e0eafc, #cfdef3);
+      color: #2c3e50;
+    }
 
-        textarea {
-            width: 100%;
-            padding: 12px;
-            font-size: 18px;
-            margin-top: 8px;
-            border-radius: 6px;
-            border: 1px solid #ccc;
-            resize: vertical;
-        }
+    h1 {
+      text-align: center;
+      color: #2f80ed;
+      font-size: 2.5rem;
+      margin-bottom: 30px;
+    }
 
-        button {
-            margin-top: 15px;
-            padding: 10px 20px;
-            font-size: 16px;
-            background-color: #4b0082;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-        }
+    label {
+      display: block;
+      margin-bottom: 10px;
+      font-weight: 700;
+      font-size: 18px;
+    }
 
-        button:hover {
-            background-color: #350062;
-        }
+    textarea, input[type="text"] {
+      width: 100%;
+      padding: 14px;
+      margin-bottom: 20px;
+      border: none;
+      border-radius: 10px;
+      font-size: 18px;
+      background: #f9f9f9;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
 
-        input[type="file"] {
-            margin-top: 10px;
-        }
+    button {
+      background-color: #2f80ed;
+      color: white;
+      padding: 12px 20px;
+      font-size: 16px;
+      border: none;
+      border-radius: 10px;
+      cursor: pointer;
+      margin-right: 10px;
+      transition: background-color 0.2s ease;
+    }
 
-        #fontName {
-            margin-top: 10px;
-            font-size: 16px;
-            color: #4b0082;
-        }
+    button:hover {
+      background-color: #1e60c7;
+    }
 
-        .footer {
-            margin-top: 50px;
-            text-align: center;
-            font-size: 24px;
-            font-weight: bold;
-            color: #111;
-        }
-    </style>
+    .footer {
+      text-align: center;
+      margin-top: 50px;
+      font-size: 20px;
+      font-weight: bold;
+      color: #2c3e50;
+    }
+
+    @media(max-width: 600px) {
+      body {
+        padding: 15px;
+      }
+    }
+  </style>
 </head>
 <body>
-    <h1>AMS Font Typing Converter</h1>
 
-    <label>📝 Enter Marathi Text:</label>
-    <textarea id="inputText" rows="4"></textarea>
-    <button onclick="convertToAMS()">Convert ➤</button>
+  <h1>🌐 AMS Font Converter</h1>
 
-    <label>🔤 AMS Font Typing Output:</label>
-    <textarea id="outputText" rows="4" readonly></textarea>
-    <button onclick="copyToClipboard()">📋 Copy to Clipboard</button>
+  <label for="inputText">📝 Enter Any Text (Marathi / Any Language):</label>
+  <textarea id="inputText" rows="5" placeholder="Type anything here..."></textarea>
 
-    <label>📁 Upload your AMS Font file (optional):</label>
-    <input type="file" accept=".ttf,.otf" onchange="displayFontName(event)" />
-    <p id="fontName"></p>
+  <label for="fontMap">🧩 Add AMS Font Mapping (e.g., अ=A, आ=AA):</label>
+  <input type="text" id="fontMap" placeholder="Leave blank to use default AMS font map" oninput="updateFontMap()" />
 
-    <div class="footer">
-        CREATED BY HARSHWARDHAN KHOPADE
-    </div>
+  <button onclick="convertToAMS()">Convert ➤</button>
+  <button onclick="copyOutput()">📋 Copy Output</button>
 
-    <script>
-        function convertToAMS() {
-            const map = {
-                'य': 'Ya', 'श': 'Saa', 'न': 'na', 'ं': 'M', 'द': 'da', 'ा': 'aa',
-                'भ': 'Ba', 'र': 'ra', 'त': 'ta', 'स': 'sa', 'म': 'ma',
-                'ि': 'i', 'ी': 'I', 'ु': 'u', 'ू': 'U', 'े': 'e', 'ै': 'E', 'ो': 'o', 'ौ': 'O',
-                'क': 'ka', 'ह': 'ha', 'ग': 'ga', 'ल': 'la', 'व': 'va', 'ळ': 'La',
-                'अ': 'A', 'आ': 'Aa', 'इ': 'i', 'ई': 'I', 'उ': 'u', 'ऊ': 'U', 'ए': 'e', 'ऐ': 'E',
-                'ओ': 'o', 'औ': 'O', 'ड': 'Da', 'ढ': 'Dha', 'झ': 'jha', 'ठ': 'Tha', 'थ': 'tha'
-            };
-            const input = document.getElementById("inputText").value;
-            let output = '';
-            for (let ch of input) {
-                output += map[ch] || ch;
-            }
-            document.getElementById("outputText").value = output;
+  <label for="outputText">🔤 AMS Font Result:</label>
+  <textarea id="outputText" rows="5" readonly placeholder="Your AMS font text will appear here..."></textarea>
+
+  <div class="footer">
+    CREATED BY HARSHWARDHAN KHOPADE
+  </div>
+
+  <script>
+    let customMap = {};
+
+    function updateFontMap() {
+      const input = document.getElementById('fontMap').value;
+      customMap = {};
+
+      input.split(',').forEach(pair => {
+        const [from, to] = pair.split('=');
+        if (from && to) {
+          customMap[from.trim()] = to.trim();
         }
+      });
+    }
 
-        function copyToClipboard() {
-            const outputText = document.getElementById("outputText");
-            outputText.select();
-            document.execCommand("copy");
-            alert("Copied to clipboard!");
-        }
+    const defaultMap = {
+      'अ': 'A', 'आ': 'AA', 'इ': 'I', 'ई': 'EE', 'उ': 'U', 'ऊ': 'OO',
+      'ए': 'E', 'ऐ': 'AI', 'ओ': 'O', 'औ': 'AU', 'क': 'K', 'ख': 'KH',
+      'ग': 'G', 'घ': 'GH', 'च': 'CH', 'छ': 'CHH', 'ज': 'J', 'झ': 'JH',
+      'ट': 'T', 'ठ': 'TH', 'ड': 'D', 'ढ': 'DH', 'ण': 'N', 'त': 'T',
+      'थ': 'TH', 'द': 'D', 'ध': 'DH', 'न': 'N', 'प': 'P', 'फ': 'PH',
+      'ब': 'B', 'भ': 'BH', 'म': 'M', 'य': 'Y', 'र': 'R', 'ल': 'L',
+      'व': 'V', 'श': 'SH', 'ष': 'SHH', 'स': 'S', 'ह': 'H', 'ळ': 'LL',
+      'ं': 'M', 'ः': 'H', 'ँ': 'M', 'ा': 'A', 'ि': 'I', 'ी': 'II',
+      'ु': 'U', 'ू': 'UU', 'े': 'E', 'ै': 'AI', 'ो': 'O', 'ौ': 'AU'
+    };
 
-        function displayFontName(event) {
-            const file = event.target.files[0];
-            if (file) {
-                document.getElementById("fontName").innerText = "Selected font: " + file.name;
-            }
-        }
-    </script>
+    function convertToAMS() {
+      const inputText = document.getElementById("inputText").value;
+      const finalMap = { ...defaultMap, ...customMap };
+      let output = '';
+
+      for (let ch of inputText) {
+        output += finalMap[ch] || ch;
+      }
+
+      document.getElementById("outputText").value = output;
+    }
+
+    function copyOutput() {
+      const output = document.getElementById("outputText");
+      output.select();
+      document.execCommand("copy");
+      alert("✅ Copied to clipboard!");
+    }
+  </script>
+
 </body>
 </html>
