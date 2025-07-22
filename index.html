@@ -4,70 +4,66 @@
   <meta charset="UTF-8" />
   <title>AMS Font Converter</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  
-  <!-- Google Font -->
-  <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;700&display=swap" rel="stylesheet">
-
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
     * {
       box-sizing: border-box;
-      font-family: 'Quicksand', sans-serif;
+      font-family: 'Inter', sans-serif;
     }
 
     body {
       margin: 0;
       padding: 30px;
-      background: linear-gradient(to right, #e0eafc, #cfdef3);
-      color: #2c3e50;
+      background: linear-gradient(to right, #ecfaff, #d6e4f0);
+      color: #2f3542;
     }
 
     h1 {
       text-align: center;
-      color: #2f80ed;
-      font-size: 2.5rem;
-      margin-bottom: 30px;
+      color: #0984e3;
+      font-size: 2rem;
+      margin-bottom: 20px;
     }
 
     label {
       display: block;
-      margin-bottom: 10px;
-      font-weight: 700;
-      font-size: 18px;
+      margin-bottom: 6px;
+      font-weight: 600;
+      font-size: 15px;
+      color: #37474f;
     }
 
-    textarea, input[type="text"] {
+    textarea, input[type="file"] {
       width: 100%;
-      padding: 14px;
-      margin-bottom: 20px;
-      border: none;
-      border-radius: 10px;
-      font-size: 18px;
-      background: #f9f9f9;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      padding: 12px;
+      margin-bottom: 16px;
+      border: 1px solid #b0bec5;
+      border-radius: 8px;
+      font-size: 15px;
+      background: #ffffff;
     }
 
     button {
-      background-color: #2f80ed;
+      background-color: #0984e3;
       color: white;
-      padding: 12px 20px;
-      font-size: 16px;
+      padding: 10px 16px;
+      font-size: 15px;
       border: none;
-      border-radius: 10px;
+      border-radius: 8px;
       cursor: pointer;
       margin-right: 10px;
-      transition: background-color 0.2s ease;
     }
 
     button:hover {
-      background-color: #1e60c7;
+      background-color: #0a6bc2;
     }
 
     .footer {
       text-align: center;
-      margin-top: 50px;
-      font-size: 20px;
+      margin-top: 40px;
+      font-size: 16px;
       font-weight: bold;
-      color: #2c3e50;
+      color: #2d3436;
     }
 
     @media(max-width: 600px) {
@@ -79,19 +75,19 @@
 </head>
 <body>
 
-  <h1>🌐 AMS Font Converter</h1>
+  <h1>🔠 AMS Font Converter</h1>
 
-  <label for="inputText">📝 Enter Any Text (Marathi / Any Language):</label>
-  <textarea id="inputText" rows="5" placeholder="Type anything here..."></textarea>
+  <label for="inputText">📝 Enter Text (Marathi or Any Language):</label>
+  <textarea id="inputText" rows="4" placeholder="Type your text here..."></textarea>
 
-  <label for="fontMap">🧩 Add AMS Font Mapping (e.g., अ=A, आ=AA):</label>
-  <input type="text" id="fontMap" placeholder="Leave blank to use default AMS font map" oninput="updateFontMap()" />
+  <label for="fontFile">📂 Upload AMS Font Map (JSON format):</label>
+  <input type="file" id="fontFile" accept=".json" onchange="loadFontMap()" />
 
   <button onclick="convertToAMS()">Convert ➤</button>
   <button onclick="copyOutput()">📋 Copy Output</button>
 
-  <label for="outputText">🔤 AMS Font Result:</label>
-  <textarea id="outputText" rows="5" readonly placeholder="Your AMS font text will appear here..."></textarea>
+  <label for="outputText">📄 AMS Font Result:</label>
+  <textarea id="outputText" rows="4" readonly placeholder="Your AMS converted output will appear here..."></textarea>
 
   <div class="footer">
     CREATED BY HARSHWARDHAN KHOPADE
@@ -100,37 +96,33 @@
   <script>
     let customMap = {};
 
-    function updateFontMap() {
-      const input = document.getElementById('fontMap').value;
-      customMap = {};
+    // Load font map JSON
+    function loadFontMap() {
+      const fileInput = document.getElementById('fontFile');
+      const file = fileInput.files[0];
 
-      input.split(',').forEach(pair => {
-        const [from, to] = pair.split('=');
-        if (from && to) {
-          customMap[from.trim()] = to.trim();
-        }
-      });
+      if (file && file.name.endsWith('.json')) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          try {
+            customMap = JSON.parse(e.target.result);
+            alert("✅ Font map uploaded successfully!");
+          } catch (err) {
+            alert("❌ Invalid JSON font map.");
+          }
+        };
+        reader.readAsText(file);
+      } else {
+        alert("❗ Please upload a valid .json font file.");
+      }
     }
-
-    const defaultMap = {
-      'अ': 'A', 'आ': 'AA', 'इ': 'I', 'ई': 'EE', 'उ': 'U', 'ऊ': 'OO',
-      'ए': 'E', 'ऐ': 'AI', 'ओ': 'O', 'औ': 'AU', 'क': 'K', 'ख': 'KH',
-      'ग': 'G', 'घ': 'GH', 'च': 'CH', 'छ': 'CHH', 'ज': 'J', 'झ': 'JH',
-      'ट': 'T', 'ठ': 'TH', 'ड': 'D', 'ढ': 'DH', 'ण': 'N', 'त': 'T',
-      'थ': 'TH', 'द': 'D', 'ध': 'DH', 'न': 'N', 'प': 'P', 'फ': 'PH',
-      'ब': 'B', 'भ': 'BH', 'म': 'M', 'य': 'Y', 'र': 'R', 'ल': 'L',
-      'व': 'V', 'श': 'SH', 'ष': 'SHH', 'स': 'S', 'ह': 'H', 'ळ': 'LL',
-      'ं': 'M', 'ः': 'H', 'ँ': 'M', 'ा': 'A', 'ि': 'I', 'ी': 'II',
-      'ु': 'U', 'ू': 'UU', 'े': 'E', 'ै': 'AI', 'ो': 'O', 'ौ': 'AU'
-    };
 
     function convertToAMS() {
       const inputText = document.getElementById("inputText").value;
-      const finalMap = { ...defaultMap, ...customMap };
       let output = '';
 
       for (let ch of inputText) {
-        output += finalMap[ch] || ch;
+        output += customMap[ch] || ch; // Keep unknown characters as-is
       }
 
       document.getElementById("outputText").value = output;
@@ -140,7 +132,7 @@
       const output = document.getElementById("outputText");
       output.select();
       document.execCommand("copy");
-      alert("✅ Copied to clipboard!");
+      alert("✅ Output copied to clipboard!");
     }
   </script>
 
