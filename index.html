@@ -33,7 +33,7 @@
       color: #37474f;
     }
 
-    textarea, input[type="file"] {
+    textarea, input[type="text"] {
       width: 100%;
       padding: 12px;
       margin-bottom: 16px;
@@ -80,8 +80,8 @@
   <label for="inputText">📝 Enter Text (Marathi or Any Language):</label>
   <textarea id="inputText" rows="4" placeholder="Type your text here..."></textarea>
 
-  <label for="fontFile">📂 Upload AMS Font Map (Optional – JSON only):</label>
-  <input type="file" id="fontFile" accept=".json" onchange="loadFontMap()" />
+  <label for="amsFont">📂 Add AMS Font (Optional Format: अ=A, आ=AA):</label>
+  <input type="text" id="amsFont" placeholder="Paste AMS font mapping here, like अ=A, आ=AA" oninput="parseCustomMap()" />
 
   <button onclick="convertToAMS()">Convert ➤</button>
   <button onclick="copyOutput()">📋 Copy Output</button>
@@ -94,7 +94,7 @@
   </div>
 
   <script>
-    let customMap = null;
+    let customMap = {};
 
     const defaultMap = {
       'अ': 'A', 'आ': 'AA', 'इ': 'I', 'ई': 'EE', 'उ': 'U', 'ऊ': 'OO',
@@ -112,32 +112,26 @@
       ' ': ' ', '\n': '\n'
     };
 
-    function loadFontMap() {
-      const fileInput = document.getElementById('fontFile');
-      const file = fileInput.files[0];
+    function parseCustomMap() {
+      const input = document.getElementById("amsFont").value;
+      customMap = {};
 
-      if (file && file.name.endsWith('.json')) {
-        const reader = new FileReader();
-        reader.onload = function(e) {
-          try {
-            customMap = JSON.parse(e.target.result);
-            alert("✅ Font map uploaded and applied!");
-          } catch (err) {
-            alert("❌ Invalid JSON font map.");
-            customMap = null;
-          }
-        };
-        reader.readAsText(file);
+      const pairs = input.split(',');
+      for (let pair of pairs) {
+        const [from, to] = pair.split('=');
+        if (from && to) {
+          customMap[from.trim()] = to.trim();
+        }
       }
     }
 
     function convertToAMS() {
       const inputText = document.getElementById("inputText").value;
-      const activeMap = customMap || defaultMap;
+      const finalMap = Object.keys(customMap).length ? customMap : defaultMap;
 
       let output = '';
       for (let ch of inputText) {
-        output += activeMap[ch] !== undefined ? activeMap[ch] : ch;
+        output += finalMap[ch] !== undefined ? finalMap[ch] : ch;
       }
 
       document.getElementById("outputText").value = output;
