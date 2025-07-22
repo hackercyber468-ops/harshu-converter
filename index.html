@@ -80,7 +80,7 @@
   <label for="inputText">📝 Enter Text (Marathi or Any Language):</label>
   <textarea id="inputText" rows="4" placeholder="Type your text here..."></textarea>
 
-  <label for="fontFile">📂 Upload AMS Font Map (JSON format):</label>
+  <label for="fontFile">📂 Upload AMS Font Map (Optional – JSON only):</label>
   <input type="file" id="fontFile" accept=".json" onchange="loadFontMap()" />
 
   <button onclick="convertToAMS()">Convert ➤</button>
@@ -94,9 +94,24 @@
   </div>
 
   <script>
-    let customMap = {};
+    let customMap = null;
 
-    // Load font map JSON
+    const defaultMap = {
+      'अ': 'A', 'आ': 'AA', 'इ': 'I', 'ई': 'EE', 'उ': 'U', 'ऊ': 'OO',
+      'ए': 'E', 'ऐ': 'AI', 'ओ': 'O', 'औ': 'AU', 'क': 'K', 'ख': 'KH',
+      'ग': 'G', 'घ': 'GH', 'च': 'CH', 'छ': 'CHH', 'ज': 'J', 'झ': 'JH',
+      'ट': 'T', 'ठ': 'TH', 'ड': 'D', 'ढ': 'DH', 'ण': 'N', 'त': 'T',
+      'थ': 'TH', 'द': 'D', 'ध': 'DH', 'न': 'N', 'प': 'P', 'फ': 'PH',
+      'ब': 'B', 'भ': 'BH', 'म': 'M', 'य': 'Y', 'र': 'R', 'ल': 'L',
+      'व': 'V', 'श': 'SH', 'ष': 'SHH', 'स': 'S', 'ह': 'H', 'ळ': 'LL',
+      'ं': 'M', 'ः': 'H', 'ँ': 'M', 'ा': 'A', 'ि': 'I', 'ी': 'II',
+      'ु': 'U', 'ू': 'UU', 'े': 'E', 'ै': 'AI', 'ो': 'O', 'ौ': 'AU',
+      '0': '0', '1': '1', '2': '2', '3': '3', '4': '4',
+      '5': '5', '6': '6', '7': '7', '8': '8', '9': '9',
+      '.': '.', ',': ',', '?': '?', '!': '!', '-': '-', ':': ':',
+      ' ': ' ', '\n': '\n'
+    };
+
     function loadFontMap() {
       const fileInput = document.getElementById('fontFile');
       const file = fileInput.files[0];
@@ -106,23 +121,23 @@
         reader.onload = function(e) {
           try {
             customMap = JSON.parse(e.target.result);
-            alert("✅ Font map uploaded successfully!");
+            alert("✅ Font map uploaded and applied!");
           } catch (err) {
             alert("❌ Invalid JSON font map.");
+            customMap = null;
           }
         };
         reader.readAsText(file);
-      } else {
-        alert("❗ Please upload a valid .json font file.");
       }
     }
 
     function convertToAMS() {
       const inputText = document.getElementById("inputText").value;
-      let output = '';
+      const activeMap = customMap || defaultMap;
 
+      let output = '';
       for (let ch of inputText) {
-        output += customMap[ch] || ch; // Keep unknown characters as-is
+        output += activeMap[ch] !== undefined ? activeMap[ch] : ch;
       }
 
       document.getElementById("outputText").value = output;
