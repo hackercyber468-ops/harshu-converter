@@ -1,0 +1,66 @@
+
+<!DOCTYPE html>
+<html lang="mr">
+<head>
+    <meta charset="UTF-8">
+    <title>AMS Font Typing Converter</title>
+    <style>
+        body {
+            font-family: sans-serif;
+            background: #f8f9fa;
+            padding: 20px;
+            color: #212529;
+        }
+        h1 {
+            text-align: center;
+            color: #4b0082;
+        }
+        textarea {
+            width: 100%;
+            padding: 15px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            font-size: 18px;
+        }
+        label {
+            font-weight: bold;
+        }
+        .footer {
+            margin-top: 40px;
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+    <script>
+        function convertToAMS() {
+            const map = {
+                'य': 'Ya', 'श': 'Saa', 'न': 'na', 'ं': 'M', 'द': 'da', 'ा': 'aa',
+                'भ': 'Ba', 'र': 'ra', 'त': 'ta', 'स': 'sa', 'म': 'ma',
+                'ा': 'aa', 'ि': 'i', 'ी': 'I', 'ु': 'u', 'ू': 'U', 'े': 'e', 'ै': 'E', 'ो': 'o', 'ौ': 'O',
+                'क': 'ka', 'ह': 'ha', 'ग': 'ga', 'ल': 'la', 'व': 'va', 'ळ': 'La',
+                'अ': 'A', 'आ': 'Aa', 'इ': 'i', 'ई': 'I', 'उ': 'u', 'ऊ': 'U', 'ए': 'e', 'ऐ': 'E',
+                'ओ': 'o', 'औ': 'O', 'ड': 'Da', 'ढ': 'Dha', 'झ': 'jha', 'ठ': 'Tha', 'थ': 'tha'
+            };
+            const input = document.getElementById("inputText").value;
+            let output = '';
+            for (let ch of input) {
+                output += map[ch] || ch;
+            }
+            document.getElementById("outputText").value = output;
+        }
+    </script>
+</head>
+<body>
+    <h1>AMS Font Typing Converter</h1>
+    <label>📝 Enter Marathi Text:</label>
+    <textarea id="inputText" rows="4" placeholder="उदाहरण: नंदा"></textarea>
+    <button onclick="convertToAMS()">Convert ➤</button>
+    <label>🔤 AMS Font Typing:</label>
+    <textarea id="outputText" rows="4" readonly></textarea>
+
+    <div class="footer">
+        Created by <strong>Harshwardhan Khopade</strong>
+    </div>
+</body>
+</html>
