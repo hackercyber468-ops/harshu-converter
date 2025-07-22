@@ -33,7 +33,7 @@
       color: #37474f;
     }
 
-    textarea, input[type="text"] {
+    textarea {
       width: 100%;
       padding: 12px;
       margin-bottom: 16px;
@@ -77,61 +77,45 @@
 
   <h1>🔠 AMS Font Converter</h1>
 
-  <label for="inputText">📝 Enter Text (Marathi or Any Language):</label>
-  <textarea id="inputText" rows="4" placeholder="Type your text here..."></textarea>
-
-  <label for="amsFont">📂 Add AMS Font (Optional Format: अ=A, आ=AA):</label>
-  <input type="text" id="amsFont" placeholder="Paste AMS font mapping here, like अ=A, आ=AA" oninput="parseCustomMap()" />
+  <label for="inputText">📝 Enter Devanagari Text:</label>
+  <textarea id="inputText" rows="4" placeholder="उदाहरण: नमस्ते! माझं नाव harsh आहे."></textarea>
 
   <button onclick="convertToAMS()">Convert ➤</button>
   <button onclick="copyOutput()">📋 Copy Output</button>
 
-  <label for="outputText">📄 AMS Font Result:</label>
-  <textarea id="outputText" rows="4" readonly placeholder="Your AMS converted output will appear here..."></textarea>
+  <label for="outputText">📄 AMS Font Output:</label>
+  <textarea id="outputText" rows="4" readonly placeholder="AMS Converted text will appear here..."></textarea>
 
   <div class="footer">
     CREATED BY HARSHWARDHAN KHOPADE
   </div>
 
   <script>
-    let customMap = {};
-
-    const defaultMap = {
-      'अ': 'A', 'आ': 'AA', 'इ': 'I', 'ई': 'EE', 'उ': 'U', 'ऊ': 'OO',
-      'ए': 'E', 'ऐ': 'AI', 'ओ': 'O', 'औ': 'AU', 'क': 'K', 'ख': 'KH',
-      'ग': 'G', 'घ': 'GH', 'च': 'CH', 'छ': 'CHH', 'ज': 'J', 'झ': 'JH',
-      'ट': 'T', 'ठ': 'TH', 'ड': 'D', 'ढ': 'DH', 'ण': 'N', 'त': 'T',
-      'थ': 'TH', 'द': 'D', 'ध': 'DH', 'न': 'N', 'प': 'P', 'फ': 'PH',
-      'ब': 'B', 'भ': 'BH', 'म': 'M', 'य': 'Y', 'र': 'R', 'ल': 'L',
-      'व': 'V', 'श': 'SH', 'ष': 'SHH', 'स': 'S', 'ह': 'H', 'ळ': 'LL',
-      'ं': 'M', 'ः': 'H', 'ँ': 'M', 'ा': 'A', 'ि': 'I', 'ी': 'II',
-      'ु': 'U', 'ू': 'UU', 'े': 'E', 'ै': 'AI', 'ो': 'O', 'ौ': 'AU',
-      '0': '0', '1': '1', '2': '2', '3': '3', '4': '4',
-      '5': '5', '6': '6', '7': '7', '8': '8', '9': '9',
-      '.': '.', ',': ',', '?': '?', '!': '!', '-': '-', ':': ':',
-      ' ': ' ', '\n': '\n'
+    const amsMap = {
+      'अ': 'A', 'आ': 'Aa', 'इ': 'i', 'ई': 'I', 'उ': 'u', 'ऊ': 'U',
+      'ऋ': 'R', 'ए': 'e', 'ऐ': 'E', 'ओ': 'o', 'औ': 'O',
+      'ं': 'M', 'ः': 'H', 'ँ': 'M',
+      'ा': 'aa', 'ि': 'i', 'ी': 'I', 'ु': 'u', 'ू': 'U',
+      'े': 'e', 'ै': 'E', 'ो': 'o', 'ौ': 'O',
+      'क': 'ka', 'ख': 'kha', 'ग': 'ga', 'घ': 'gha', 'ङ': 'nga',
+      'च': 'cha', 'छ': 'chha', 'ज': 'ja', 'झ': 'jha', 'ञ': 'nya',
+      'ट': 'Ta', 'ठ': 'Tha', 'ड': 'Da', 'ढ': 'Dha', 'ण': 'Na',
+      'त': 'ta', 'थ': 'tha', 'द': 'da', 'ध': 'dha', 'न': 'na',
+      'प': 'pa', 'फ': 'pha', 'ब': 'ba', 'भ': 'bha', 'म': 'ma',
+      'य': 'ya', 'र': 'ra', 'ल': 'la', 'व': 'va',
+      'श': 'sha', 'ष': 'Sha', 'स': 'sa', 'ह': 'ha',
+      'ळ': 'La', 'क्ष': 'kSha', 'त्र': 'tra', 'ज्ञ': 'gya',
+      '०': '0', '१': '1', '२': '2', '३': '3', '४': '4',
+      '५': '5', '६': '6', '७': '7', '८': '8', '९': '9'
     };
 
-    function parseCustomMap() {
-      const input = document.getElementById("amsFont").value;
-      customMap = {};
-
-      const pairs = input.split(',');
-      for (let pair of pairs) {
-        const [from, to] = pair.split('=');
-        if (from && to) {
-          customMap[from.trim()] = to.trim();
-        }
-      }
-    }
-
     function convertToAMS() {
-      const inputText = document.getElementById("inputText").value;
-      const finalMap = Object.keys(customMap).length ? customMap : defaultMap;
-
+      const input = document.getElementById("inputText").value;
       let output = '';
-      for (let ch of inputText) {
-        output += finalMap[ch] !== undefined ? finalMap[ch] : ch;
+
+      for (let i = 0; i < input.length; i++) {
+        const ch = input[i];
+        output += amsMap[ch] !== undefined ? amsMap[ch] : ch;
       }
 
       document.getElementById("outputText").value = output;
@@ -141,7 +125,7 @@
       const output = document.getElementById("outputText");
       output.select();
       document.execCommand("copy");
-      alert("✅ Output copied to clipboard!");
+      alert("✅ AMS Output copied to clipboard!");
     }
   </script>
 
