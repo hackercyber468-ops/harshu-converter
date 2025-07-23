@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <title>AMS Font Converter</title>
+  <title>AMS Font Converter (Legacy)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
   <style>
@@ -75,36 +75,38 @@
 </head>
 <body>
 
-  <h1>🔠 AMS Font Converter</h1>
+  <h1>🔠 AMS Legacy Font Converter</h1>
 
   <label for="inputText">📝 Enter Devanagari Text:</label>
-  <textarea id="inputText" rows="4" placeholder="उदाहरण: नमस्ते! माझं नाव harsh आहे."></textarea>
+  <textarea id="inputText" rows="4" placeholder="उदाहरण: मराठी भाषा सर्वोत्तम आहे."></textarea>
 
   <button onclick="convertToAMS()">Convert ➤</button>
   <button onclick="copyOutput()">📋 Copy Output</button>
 
   <label for="outputText">📄 AMS Font Output:</label>
-  <textarea id="outputText" rows="4" readonly placeholder="AMS Converted text will appear here..."></textarea>
+  <textarea id="outputText" rows="4" readonly placeholder="AMS Font Code Will Appear Here..."></textarea>
 
   <div class="footer">
     CREATED BY HARSHWARDHAN KHOPADE
   </div>
 
   <script>
-    const amsMap = {
-      'अ': 'A', 'आ': 'Aa', 'इ': 'i', 'ई': 'I', 'उ': 'u', 'ऊ': 'U',
-      'ऋ': 'R', 'ए': 'e', 'ऐ': 'E', 'ओ': 'o', 'औ': 'O',
-      'ं': 'M', 'ः': 'H', 'ँ': 'M',
-      'ा': 'aa', 'ि': 'i', 'ी': 'I', 'ु': 'u', 'ू': 'U',
-      'े': 'e', 'ै': 'E', 'ो': 'o', 'ौ': 'O',
-      'क': 'ka', 'ख': 'kha', 'ग': 'ga', 'घ': 'gha', 'ङ': 'nga',
-      'च': 'cha', 'छ': 'chha', 'ज': 'ja', 'झ': 'jha', 'ञ': 'nya',
-      'ट': 'Ta', 'ठ': 'Tha', 'ड': 'Da', 'ढ': 'Dha', 'ण': 'Na',
-      'त': 'ta', 'थ': 'tha', 'द': 'da', 'ध': 'dha', 'न': 'na',
-      'प': 'pa', 'फ': 'pha', 'ब': 'ba', 'भ': 'bha', 'म': 'ma',
-      'य': 'ya', 'र': 'ra', 'ल': 'la', 'व': 'va',
-      'श': 'sha', 'ष': 'Sha', 'स': 'sa', 'ह': 'ha',
-      'ळ': 'La', 'क्ष': 'kSha', 'त्र': 'tra', 'ज्ञ': 'gya',
+    const amsLegacyMap = {
+      'अ': 'A', 'आ': 'B', 'इ': 'C', 'ई': 'D', 'उ': 'E', 'ऊ': 'F',
+      'ऋ': 'G', 'ए': 'H', 'ऐ': 'I', 'ओ': 'J', 'औ': 'K',
+
+      'ा': 'a', 'ि': 'b', 'ी': 'I', 'ु': 'd', 'ू': 'D',
+      'े': 'e', 'ै': 'E', 'ो': 'f', 'ौ': 'F', 'ं': 'M', 'ः': 'H', 'ँ': 'M',
+
+      'क': 'k', 'ख': 'K', 'ग': 'g', 'घ': 'G', 'ङ': 'q',
+      'च': 'c', 'छ': 'C', 'ज': 'j', 'झ': 'J', 'ञ': 'Z',
+      'ट': 't', 'ठ': 'O', 'ड': 'd', 'ढ': 'D', 'ण': 'N',
+      'त': 'T', 'थ': 'W', 'द': 'x', 'ध': 'X', 'न': 'n',
+      'प': 'p', 'फ': 'P', 'ब': 'b', 'भ': 'B', 'म': 'm',
+      'य': 'y', 'र': 'r', 'ल': 'l', 'व': 'v',
+      'श': 'S', 'ष': 'z', 'स': 's', 'ह': 'h',
+      'ळ': 'L', 'क्ष': 'kSh', 'त्र': 'tr', 'ज्ञ': 'jY',
+
       '०': '0', '१': '1', '२': '2', '३': '3', '४': '4',
       '५': '5', '६': '6', '७': '7', '८': '8', '९': '9'
     };
@@ -115,7 +117,7 @@
 
       for (let i = 0; i < input.length; i++) {
         const ch = input[i];
-        output += amsMap[ch] !== undefined ? amsMap[ch] : ch;
+        output += amsLegacyMap[ch] !== undefined ? amsLegacyMap[ch] : ch;
       }
 
       document.getElementById("outputText").value = output;
@@ -125,7 +127,7 @@
       const output = document.getElementById("outputText");
       output.select();
       document.execCommand("copy");
-      alert("✅ AMS Output copied to clipboard!");
+      alert("✅ Output copied to clipboard!");
     }
   </script>
 
